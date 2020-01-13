@@ -1,0 +1,29 @@
+{
+  "name": "hrsf124-mvp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --inspect server/server.js",
+    "server:dev": "nodemon --inspect server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyungjinlee93/hrsf124-mvp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hyungjinlee93/hrsf124-mvp/issues"
+  },
+  "homepage": "https://github.com/hyungjinlee93/hrsf124-mvp#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^7.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
