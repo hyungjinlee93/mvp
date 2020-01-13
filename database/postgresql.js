@@ -1,6 +1,10 @@
 const { Pool } = require('pg');
+const psqlpassword = require('../keys/psqlrootpw');
 const pool = new Pool({
-  database: 'test'
+  user: 'root',
+  password: psqlpassword,
+  host: '172.31.30.159',
+  database: 'mvp'
 });
 
 module.exports.getDay = (date, cb) => {
