@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 const psqlpassword = require('../keys/psqlrootpw');
+const sha256 = require('js-sha256');
 const pool = new Pool({
   database: 'test'
 });
@@ -10,8 +11,8 @@ const pool = new Pool({
 //   database: 'mvp'
 // });
 
-module.exports.getDay = (date, cb) => {
-  pool.query(`SELECT users.student, cohorts.cohort, attendance.phone_id, timest FROM users, cohorts, attendance WHERE attendance.timest > '${date}' AND attendance.cohort_id = cohorts.id AND attendance.student_id = users.id;`)
+module.exports.getDay = (date, cohort, cb) => {
+  pool.query(`SELECT users.student, cohorts.cohort, attendance.phone_id, timest FROM users, cohorts, attendance WHERE attendance.timest > '${date}' AND attendance.cohort_id = cohorts.id AND attendance.student_id = users.id AND cohorts.cohort = '${cohort}';`)
     .then(res => {
       cb(null, res.rows);
     })
@@ -105,5 +106,20 @@ module.exports.postKeywords = (date, keyword, cb) => {
     })
     .catch(err => {
       cb(err);
+    })
+}
+module.exports.adminSignIn = (admin_id, password, cb) => {
+  pool.query(`SELECT salt, password FROM admins WHERE admin_id='${admin_id}'`)
+    .then(res => {
+      if(res.rowCount !== 1) {
+        cb('Error logging in');
+      } else {
+        const hashedpw = sha256 (password + res.rows[0].salt);
+        if(res.rows[0].password === hashedpw) {
+          cb(null, true);
+        } else {
+          cb('Error logging in');
+        }
+      }
     })
 }

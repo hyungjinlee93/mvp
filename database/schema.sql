@@ -28,3 +28,9 @@ CREATE TABLE attendance (
   keyword VARCHAR (32),
   timest TIMESTAMP
 );
+
+CREATE TABLE admins (
+  admin_id VARCHAR (32) PRIMARY KEY,
+  salt VARCHAR (65),
+  password VARCHAR (65)
+);

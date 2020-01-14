@@ -1,7 +1,8 @@
 const db = require('../database/postgresql.js');
-
+const redis = require('../database/redis.js');
+const sha256 = require('js-sha256');
 module.exports.getDay = (req, res) => {
-  db.getDay(((req.query === undefined || req.query.date === undefined) ? (new Date()).toLocaleDateString() : req.query.date), (err, data) => {
+  db.getDay(req.body.date, req.body.cohort, (err, data) => {
     if (err) {
       console.error('Getting Day Info from DB error: ', err);
       res.status(400).send();
@@ -35,7 +36,7 @@ module.exports.getKeywords = (req, res) => {
   db.getKeywords(date, (err, data) => {
     if (err) {
       console.error('Getting keywords from DB error: ', err);
-      res.status(400).send({errmsg: err});
+      res.status(400).send({ errmsg: err });
     } else {
       res.status(200).send(data);
     }
@@ -54,18 +55,14 @@ module.exports.signIn = (req, res) => {
   });
 }
 module.exports.postCohorts = (req, res) => {
-  if (req.body.cohort === undefined || typeof req.body.cohort !== 'string') {
-    res.status(400).send();
-  } else {
-    db.postCohorts(req.body.cohort, (err, data) => {
-      if (err) {
-        console.error('Creating cohort in DB error: ', err);
-        res.status(400).send();
-      } else {
-        res.status(200).send('SUCCESS');
-      }
-    });
-  }
+  db.postCohorts(req.body.cohort, (err, data) => {
+    if (err) {
+      console.error('Creating cohort in DB error: ', err);
+      res.status(400).send();
+    } else {
+      res.status(200).send('SUCCESS');
+    }
+  });
 }
 module.exports.postUsers = (req, res) => {
   if (req.body.student === undefined || req.body.cohort === undefined || typeof req.body.cohort !== 'string' || typeof req.body.student !== 'string') {
@@ -99,5 +96,19 @@ module.exports.postKeywords = (req, res) => {
     } else {
       res.status(200).send('SUCCESS');
     }
+  })
+}
+
+module.exports.adminSignIn = (req, res) => {
+  db.adminSignIn(req.body.user, req.body.password, (err, data) => {
+    if (err) {
+      console.error('Error signing into DB: ', err);
+      res.status(400).send();
+    } else {
+      let num = Math.ceil(Math.random() * 100000));
+  let token = sha256(num.toString());
+  redis.setCache(token);
+  res.status(200).send({ token });
+}
   })
 }

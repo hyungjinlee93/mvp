@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --inspect server/server.js",
-    "server:dev": "nodemon --inspect server/server.js"
+    "server:dev": "nodemon --inspect server/server.js",
+    "build:dev": "webpack -d -w",
+    "build:prod": "webpack --mode=production"
   },
   "repository": {
     "type": "git",
@@ -21,9 +23,19 @@
   "homepage": "https://github.com/hyungjinlee93/hrsf124-mvp#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "pg": "^7.17.1"
+    "js-sha256": "^0.9.0",
+    "pg": "^7.17.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/preset-react": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "nodemon": "^2.0.2",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   }
 }
