@@ -35,13 +35,24 @@ module.exports.getKeywords = (req, res) => {
   db.getKeywords(date, (err, data) => {
     if (err) {
       console.error('Getting keywords from DB error: ', err);
-      res.status(400).send();
+      res.status(400).send({errmsg: err});
     } else {
       res.status(200).send(data);
     }
   });
 }
 
+module.exports.signIn = (req, res) => {
+  let today = (new Date()).toLocaleDateString();
+  db.signIn(req.body.student, req.body.cohort, req.body.keyword, req.body.phone_id, today, req.body.timest, (err, data) => {
+    if (err) {
+      console.error('Error signing in from DB: ', err);
+      res.status(400).send();
+    } else {
+      res.status(200).send('SUCCESS');
+    }
+  });
+}
 module.exports.postCohorts = (req, res) => {
   if (req.body.cohort === undefined || typeof req.body.cohort !== 'string') {
     res.status(400).send();

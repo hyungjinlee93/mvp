@@ -18,9 +18,13 @@ app.get('/api/users', (req, res) => {
   controller.getUsers(req, res);
 });
 app.get('/api/keywords', (req, res) => {
+  //authentication here
   controller.getKeywords(req, res);
 });
 
+app.post('/api/signin', (req, res) => {
+  controller.signIn(req, res);
+});
 app.post('/api/cohorts', (req, res) => {
   //authentication here
   controller.postCohorts(req, res);
